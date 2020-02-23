@@ -1,6 +1,9 @@
 package me.jaeuk;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
@@ -10,7 +13,54 @@ import java.util.Arrays;
  */
 public class App 
 {
-    public static void main( String[] args ) throws NoSuchFieldException {
+    public static void main( String[] args ) throws NoSuchFieldException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        /*
+        Class 인스턴스 만들기
+        Class.newInstance()는 deprecated 됐으며 이제부터는
+        생성자를 통해서 만들어야 한다.
+
+        생성자로 인스턴스 만들기
+        Constructor.newInstance(params)
+        */
+        Class<?> bookClass = Class.forName("me.jaeuk.Book2");
+        Constructor<?> constructor = bookClass.getConstructor(String.class);
+        Book2 book = (Book2) constructor.newInstance("myBook");
+        System.out.println(book);
+
+        /*
+        필드 값 접근하기/설정하기
+        특정 인스턴스가 가지고 있는 값을 가져오는 것이기 때문에 인스턴스가 필요하다.
+        Field.get(object)
+        Filed.set(object, value)
+        Static 필드를 가져올 때는 object가 없어도 되니까 null을 넘기면 된다.
+        */
+        Field a = Book2.class.getDeclaredField("A");
+        System.out.println("1 : " + a.get(null));
+        a.set(null, "AAAAA");
+        System.out.println("2 : " + a.get(null));
+
+        Field b = Book2.class.getDeclaredField("B");
+        // private 이기 때문에
+        b.setAccessible(true);
+        System.out.println("1 : " + b.get(book));
+        b.set(book, "BBBBBB");
+        System.out.println("1 : " + b.get(book));
+
+
+        // 메소드 실행하기
+        // Object Method.invoke(object, params)
+        Method c = Book2.class.getDeclaredMethod("c");
+        // private 이면 setAccessible true 로 실행 가능.
+        //c.setAccessible(true);
+        c.invoke(book); // 파라미터 없기 때문에 그냥 호출
+
+        // 파라미터 타입을 준다.
+        Method sum = Book2.class.getDeclaredMethod("sum", int.class, int.class);
+        int invoke = (int) sum.invoke(book, 1,2);
+        System.out.println(invoke);
+    }
+
+    public void annotation(){
         // annotation_study
         System.out.println("MyBook 이 상속받는 Book이 가지고 있는 어노테이션까지 ");
         Arrays.stream(MyBook.class.getAnnotations()).forEach(System.out::println);
@@ -27,8 +77,8 @@ public class App
                 System.out.println(fieldAnnotation.number());
             });
         });
-
     }
+
 
     public void reflection_study() throws NoSuchFieldException {
         // 1.클래스 타입으로 가져오는 방법
