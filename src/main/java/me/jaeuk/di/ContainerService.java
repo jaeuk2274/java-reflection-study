@@ -3,6 +3,7 @@ package me.jaeuk.di;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
+// di framework 를 직접 만들보면서 스터디.
 public class ContainerService {
 
     public static <T> T getObject(Class<T> classType)  {
