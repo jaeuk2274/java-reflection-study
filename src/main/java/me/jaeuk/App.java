@@ -53,11 +53,11 @@ public class App
         Class<? super MyBook> superClass = MyBook.class.getSuperclass();
         System.out.println(superClass);
 
-
-        Arrays.stream(MyBook.class.getInterfaces()).forEach(f -> {
+        Arrays.stream(MyBook.class.getMethods()).forEach(f -> {
             int modifiers = f.getModifiers();
             System.out.println(f);
             System.out.println(Modifier.isPrivate(modifiers));
+            System.out.println(Modifier.isStatic(modifiers));
         });
     }
 }
