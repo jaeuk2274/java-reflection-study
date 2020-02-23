@@ -1,6 +1,5 @@
 package me.jaeuk;
 
-public class MyBook extends Book {
-
-
+@AnoterAnnotation
+public class MyBook extends Book implements MyInterface{
 }

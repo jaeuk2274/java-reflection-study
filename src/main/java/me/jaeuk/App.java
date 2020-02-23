@@ -11,8 +11,26 @@ import java.util.Arrays;
 public class App 
 {
     public static void main( String[] args ) throws NoSuchFieldException {
-        System.out.println( "Hello World!" );
+        // annotation_study
+        System.out.println("MyBook 이 상속받는 Book이 가지고 있는 어노테이션까지 ");
+        Arrays.stream(MyBook.class.getAnnotations()).forEach(System.out::println);
 
+        System.out.println("MyBook에 있는 어노테이션만 보고싶다면");
+        Arrays.stream(MyBook.class.getDeclaredAnnotations()).forEach(System.out::println);
+
+        System.out.println("필드에 붙은 어노테이션 등 다양한 방식 응용 가능");
+        Arrays.stream(Book.class.getDeclaredFields()).forEach(f -> {
+            Arrays.stream(f.getAnnotations()).forEach(System.out::println);
+            Arrays.stream(f.getAnnotations()).forEach(a -> {
+                FieldAnnotation fieldAnnotation = (FieldAnnotation) a;
+                System.out.println(fieldAnnotation.name());
+                System.out.println(fieldAnnotation.number());
+            });
+        });
+
+    }
+
+    public void reflection_study() throws NoSuchFieldException {
         // 1.클래스 타입으로 가져오는 방법
         Class<Book> bookClass = Book.class;
 
